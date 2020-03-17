@@ -2,6 +2,7 @@ package com.tolgahanalb.mvvmbase.ui.auth
 
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.tolgahanalb.mvvmbase.data.repositories.UserRepository
 
 class AuthViewModel : ViewModel() {
 
@@ -9,12 +10,13 @@ class AuthViewModel : ViewModel() {
     var password: String? = null
     var authListener: AuthListener? = null
 
-    fun onLoginButtonClick(view: View){
+    fun onLoginButtonClick(view: View) {
         authListener?.onStarted()
-        if(email.isNullOrEmpty() || password.isNullOrEmpty()){
+        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             authListener?.onFailure("Invalid email or Password")
             return
         }
-        //success
+        val loginResponse = UserRepository().userLogin(email!!, password!!)
+        authListener?.onSuccess(loginResponse)
     }
 }
